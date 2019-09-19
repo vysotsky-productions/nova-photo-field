@@ -1,0 +1,136 @@
+.media-image_wrap {
+    position:       relative;
+    display:        inline-block;
+    vertical-align: middle;
+
+    margin:         5px;
+    background:     #eef1f4;
+
+    &.mod_field-detail {
+        width:     100%;
+        max-width: 200px;
+        margin:    0;
+
+        .media-image {
+            width:  100%;
+            height: auto;
+        }
+
+        .media-image_download {
+            top: 10px;
+        }
+    }
+
+    &.mod_field-edit {
+        cursor: pointer;
+
+        &:before {
+            content:  '';
+            position: absolute;
+            top:      0;
+            bottom:   0;
+            left:     0;
+            right:    0;
+            z-index:  2;
+
+            display:  block;
+            width:    100%;
+            height:   100%;
+        }
+
+        &:hover, &.mod_active {
+            &:before {
+                border: 2px solid #4099de;
+            }
+        }
+    }
+
+    &.mod_field-gallery-detail {
+        .media-image_download {
+            top: 10px;
+        }
+    }
+
+    &.mod_field-index {
+        margin: 5px 0;
+
+        .media-image {
+            width:     240px;
+            height:    240px;
+            min-width: 240px;
+        }
+
+        .media-image_download {
+            top: 10px;
+        }
+    }
+
+    .media-image {
+        position:   relative;
+        z-index:    1;
+
+        display:    block;
+        width:      240px;
+        height:     240px;
+        object-fit: contain;
+    }
+
+    .media-image_delete {
+        position:      absolute;
+        top:           10px;
+        right:         10px;
+        z-index:       5;
+
+        width:         24px;
+        height:        24px;
+
+        background:    #ff0c17;
+        padding:       5px;
+        font-size:     0;
+        opacity:       0.6;
+        border-radius: 4px;
+        cursor:        pointer;
+
+        & > * {
+            font-size: 17px;
+            color:     white;
+        }
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    .media-image_download {
+        position:      absolute;
+
+        width:         24px;
+        height:        24px;
+
+        top:           43px;
+        right:         10px;
+        z-index:       5;
+        background:    #297ec0;
+        padding:       5px;
+        font-size:     0;
+        opacity:       0.6;
+        border-radius: 4px;
+        cursor:        pointer;
+
+        & > * {
+            font-size: 17px;
+            color:     white;
+        }
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+}
+
+.media-image-list {
+    width:      60px;
+    height:     60px;
+
+    object-fit: contain;
+}
