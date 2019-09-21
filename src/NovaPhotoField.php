@@ -14,12 +14,50 @@ class NovaPhotoField extends Field
      */
     public $component = 'NovaPhotoField';
 
+    public $handler;
+
+    public function __construct($name, $attribute = null, $disk = 'public')
+    {
+        parent::__construct($name, $attribute);
+    }
+
+    public function handleClass($handler)
+    {
+        $this->handler = $handler;
+        return $this;
+    }
+
     protected function fillAttributeFromRequest(NovaRequest $request,
                                                 $requestAttribute,
                                                 $model,
                                                 $attribute)
     {
+        $cropData = json_decode($request[$attribute . "_crop_data"]);
 
+        $path = $this->meta['params']['folder'];
+        $config = $this->meta['params']['thumbs'][$path];
+
+        if ($request[$attribute . "_delete_id"]) {
+            $model->{$attribute}()->dissociate();
+            $model->save();
+            $this->handler::delete($request[$attribute . "_delete_id"], $config, $path);
+        }
+
+        if ($request->file($attribute . "_file")) {
+
+            $media = $this->handler::save(
+                $request->file($attribute . "_file"),
+                $cropData,
+                $path,
+                $config
+            );
+            $model->{$attribute}()->associate($media);
+            $model->save();
+        }
+
+        if ($request[$attribute . "_update_id"] && $cropData) {
+            $this->handler::update($request[$attribute . "_update_id"], $config, $path, $cropData);
+        }
     }
 
     public function params(array $params)
