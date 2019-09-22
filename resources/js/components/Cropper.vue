@@ -2,7 +2,7 @@
     <div>
 
         <modal @modal-close="closeModal">
-            <card class="text-center m-2 bg-white rounded-lg shadow-lg overflow-hidden">
+            <card class="text-center m-2 bg-white rounded-lg max-w-2xl p-view shadow-lg overflow-hidden">
                 <vue-cropper
                         ref="cropper"
                         :view-mode="1"
@@ -12,7 +12,6 @@
                         :movable="false"
                         :src="imgSrc"
                         alt="Source Image"
-                        class="max-w-3xl"
                 >
                 </vue-cropper>
 

@@ -2680,13 +2680,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_laravel_nova__ = __webpack_require__(45);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_laravel_nova___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_laravel_nova__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__MediaLoading__ = __webpack_require__(46);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__MediaLoading___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__MediaLoading__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Cropper__ = __webpack_require__(52);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Cropper___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__Cropper__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_convertBlobToBase64__ = __webpack_require__(63);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_getFileExtension__ = __webpack_require__(64);
-//
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Cropper__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Cropper___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__Cropper__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_convertBlobToBase64__ = __webpack_require__(63);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_getFileExtension__ = __webpack_require__(64);
 //
 //
 //
@@ -2755,7 +2752,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.config.devtools = true;
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    components: { MediaLoading: __WEBPACK_IMPORTED_MODULE_2__MediaLoading___default.a, Cropper: __WEBPACK_IMPORTED_MODULE_3__Cropper___default.a },
+    components: { Cropper: __WEBPACK_IMPORTED_MODULE_2__Cropper___default.a },
 
     mixins: [__WEBPACK_IMPORTED_MODULE_1_laravel_nova__["FormField"], __WEBPACK_IMPORTED_MODULE_1_laravel_nova__["HandlesValidationErrors"]],
 
@@ -2767,13 +2764,12 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.config.devtools = true;
 
             original: null,
             preview: null,
-            // path: null,
-            // tmpUrl: null,
-            croppedMedia: false,
-            loading: false,
-            typeResource: 'mediaField',
+
             value: false,
             name: false,
+
+            useCropper: false,
+
             newPhoto: null,
             cropData: null,
             showCropper: false,
@@ -2800,11 +2796,11 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.config.devtools = true;
 
             var file = target.files[0];
 
-            Object(__WEBPACK_IMPORTED_MODULE_4__utils_convertBlobToBase64__["a" /* convertBlobToBase64 */])(file).then(function (img) {
+            Object(__WEBPACK_IMPORTED_MODULE_3__utils_convertBlobToBase64__["a" /* convertBlobToBase64 */])(file).then(function (img) {
                 _this.original = img;
                 _this.preview = img;
                 _this.newPhoto = file;
-                _this.extension = Object(__WEBPACK_IMPORTED_MODULE_5__utils_getFileExtension__["a" /* default */])(file.name);
+                _this.extension = Object(__WEBPACK_IMPORTED_MODULE_4__utils_getFileExtension__["a" /* default */])(file.name);
                 console.log(_this.newPhoto);
             });
         },
@@ -2861,6 +2857,8 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.config.devtools = true;
             previewFormUrl = _field.previewFormUrl,
             previewUrl = _field.previewUrl;
 
+
+        this.useCropper = this.field.useCropper;
 
         if (value) {
             this.mediaId = value.id;
@@ -25318,97 +25316,9 @@ module.exports = g;
 });
 
 /***/ }),
-/* 46 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(47)
-}
-var normalizeComponent = __webpack_require__(1)
-/* script */
-var __vue_script__ = __webpack_require__(50)
-/* template */
-var __vue_template__ = __webpack_require__(51)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = "data-v-37bf78a3"
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources/js/components/MediaLoading.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-37bf78a3", Component.options)
-  } else {
-    hotAPI.reload("data-v-37bf78a3", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 47 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(48);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(13)("06debec7", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-37bf78a3\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/sass-loader/lib/loader.js!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./MediaLoading.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-37bf78a3\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/sass-loader/lib/loader.js!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./MediaLoading.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 48 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(3)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n.media-loading[data-v-37bf78a3] {\n  display: inline-block;\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  z-index: 3;\n  -webkit-transform: translateX(-50%) translateY(-50%);\n          transform: translateX(-50%) translateY(-50%);\n}\n.media-loading .lds-spinner[data-v-37bf78a3] {\n    width: 64px;\n    height: 64px;\n}\n.media-loading .lds-spinner div[data-v-37bf78a3] {\n    -webkit-transform-origin: 32px 32px;\n            transform-origin: 32px 32px;\n    -webkit-animation: lds-spinner-data-v-37bf78a3 1.2s linear infinite;\n            animation: lds-spinner-data-v-37bf78a3 1.2s linear infinite;\n}\n.media-loading .lds-spinner div[data-v-37bf78a3]:after {\n    content: \" \";\n    display: block;\n    position: absolute;\n    top: 3px;\n    left: 29px;\n    width: 5px;\n    height: 14px;\n    border-radius: 20%;\n    background: #4099de;\n}\n.media-loading .lds-spinner div[data-v-37bf78a3]:nth-child(1) {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n    -webkit-animation-delay: -1.1s;\n            animation-delay: -1.1s;\n}\n.media-loading .lds-spinner div[data-v-37bf78a3]:nth-child(2) {\n    -webkit-transform: rotate(30deg);\n            transform: rotate(30deg);\n    -webkit-animation-delay: -1s;\n            animation-delay: -1s;\n}\n.media-loading .lds-spinner div[data-v-37bf78a3]:nth-child(3) {\n    -webkit-transform: rotate(60deg);\n            transform: rotate(60deg);\n    -webkit-animation-delay: -0.9s;\n            animation-delay: -0.9s;\n}\n.media-loading .lds-spinner div[data-v-37bf78a3]:nth-child(4) {\n    -webkit-transform: rotate(90deg);\n            transform: rotate(90deg);\n    -webkit-animation-delay: -0.8s;\n            animation-delay: -0.8s;\n}\n.media-loading .lds-spinner div[data-v-37bf78a3]:nth-child(5) {\n    -webkit-transform: rotate(120deg);\n            transform: rotate(120deg);\n    -webkit-animation-delay: -0.7s;\n            animation-delay: -0.7s;\n}\n.media-loading .lds-spinner div[data-v-37bf78a3]:nth-child(6) {\n    -webkit-transform: rotate(150deg);\n            transform: rotate(150deg);\n    -webkit-animation-delay: -0.6s;\n            animation-delay: -0.6s;\n}\n.media-loading .lds-spinner div[data-v-37bf78a3]:nth-child(7) {\n    -webkit-transform: rotate(180deg);\n            transform: rotate(180deg);\n    -webkit-animation-delay: -0.5s;\n            animation-delay: -0.5s;\n}\n.media-loading .lds-spinner div[data-v-37bf78a3]:nth-child(8) {\n    -webkit-transform: rotate(210deg);\n            transform: rotate(210deg);\n    -webkit-animation-delay: -0.4s;\n            animation-delay: -0.4s;\n}\n.media-loading .lds-spinner div[data-v-37bf78a3]:nth-child(9) {\n    -webkit-transform: rotate(240deg);\n            transform: rotate(240deg);\n    -webkit-animation-delay: -0.3s;\n            animation-delay: -0.3s;\n}\n.media-loading .lds-spinner div[data-v-37bf78a3]:nth-child(10) {\n    -webkit-transform: rotate(270deg);\n            transform: rotate(270deg);\n    -webkit-animation-delay: -0.2s;\n            animation-delay: -0.2s;\n}\n.media-loading .lds-spinner div[data-v-37bf78a3]:nth-child(11) {\n    -webkit-transform: rotate(300deg);\n            transform: rotate(300deg);\n    -webkit-animation-delay: -0.1s;\n            animation-delay: -0.1s;\n}\n.media-loading .lds-spinner div[data-v-37bf78a3]:nth-child(12) {\n    -webkit-transform: rotate(330deg);\n            transform: rotate(330deg);\n    -webkit-animation-delay: 0s;\n            animation-delay: 0s;\n}\n@-webkit-keyframes lds-spinner-data-v-37bf78a3 {\n0% {\n    opacity: 1;\n}\n100% {\n    opacity: 0;\n}\n}\n@keyframes lds-spinner-data-v-37bf78a3 {\n0% {\n    opacity: 1;\n}\n100% {\n    opacity: 0;\n}\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
+/* 46 */,
+/* 47 */,
+/* 48 */,
 /* 49 */
 /***/ (function(module, exports) {
 
@@ -25442,89 +25352,8 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 50 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['loading']
-});
-
-/***/ }),
-/* 51 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _vm.loading
-    ? _c("div", { staticClass: "media-loading" }, [_vm._m(0)])
-    : _vm._e()
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "lds-spinner" }, [
-      _c("div"),
-      _vm._v(" "),
-      _c("div"),
-      _vm._v(" "),
-      _c("div"),
-      _vm._v(" "),
-      _c("div"),
-      _vm._v(" "),
-      _c("div"),
-      _vm._v(" "),
-      _c("div"),
-      _vm._v(" "),
-      _c("div"),
-      _vm._v(" "),
-      _c("div"),
-      _vm._v(" "),
-      _c("div"),
-      _vm._v(" "),
-      _c("div"),
-      _vm._v(" "),
-      _c("div"),
-      _vm._v(" "),
-      _c("div")
-    ])
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-37bf78a3", module.exports)
-  }
-}
-
-/***/ }),
+/* 50 */,
+/* 51 */,
 /* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -25625,7 +25454,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_cropperjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_cropperjs__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_cropperjs_dist_cropper_css__ = __webpack_require__(58);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_cropperjs_dist_cropper_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_cropperjs_dist_cropper_css__);
-//
 //
 //
 //
@@ -30024,12 +29852,11 @@ var render = function() {
             "card",
             {
               staticClass:
-                "text-center m-2 bg-white rounded-lg shadow-lg overflow-hidden"
+                "text-center m-2 bg-white rounded-lg max-w-2xl p-view shadow-lg overflow-hidden"
             },
             [
               _c("vue-cropper", {
                 ref: "cropper",
-                staticClass: "max-w-3xl",
                 attrs: {
                   "view-mode": 1,
                   rotatable: false,
@@ -30201,11 +30028,8 @@ var render = function() {
                     })
                   ],
                   1
-                ),
-                _vm._v(" "),
-                _c("media-loading", { attrs: { loading: _vm.loading } })
-              ],
-              1
+                )
+              ]
             )
           : _c("div", { staticClass: "avatar-uploader add-image" }, [
               _c(
@@ -30223,7 +30047,7 @@ var render = function() {
             ])
       ]),
       _vm._v(" "),
-      _vm.showCropper && _vm.original
+      _vm.showCropper && _vm.original && _vm.useCropper
         ? _c("cropper", {
             attrs: { "img-src": _vm.original, extension: _vm.extension },
             on: {

@@ -21,7 +21,6 @@
                     <icon type="download" width="12" height="13.5"/>
                 </a>
 
-                <media-loading :loading="loading"></media-loading>
             </div>
 
             <div class="avatar-uploader add-image" v-else>
@@ -33,7 +32,7 @@
             </div>
         </div>
 
-        <cropper v-if="showCropper && original"
+        <cropper v-if="showCropper && original && useCropper"
                  :img-src="original"
                  :extension="extension"
                  @cropped="saveNewCropData"
@@ -61,14 +60,14 @@
     Vue.config.devtools = true;
 
     import {FormField, HandlesValidationErrors} from 'laravel-nova'
-    import MediaLoading from "./MediaLoading";
+
     import Cropper from "./Cropper"
     import {convertBlobToBase64} from "../utils/convertBlobToBase64";
     import getFileExtension from "../utils/getFileExtension";
 
 
     export default {
-        components: {MediaLoading, Cropper},
+        components: {Cropper},
 
         mixins: [FormField, HandlesValidationErrors],
 
@@ -80,13 +79,12 @@
 
                 original: null,
                 preview: null,
-                // path: null,
-                // tmpUrl: null,
-                croppedMedia: false,
-                loading: false,
-                typeResource: 'mediaField',
+
                 value: false,
                 name: false,
+
+                useCropper: false,
+
                 newPhoto: null,
                 cropData: null,
                 showCropper: false,
@@ -115,7 +113,7 @@
 
             },
             setMediaToDelete() {
-                if(this.mediaId) this.deleteId = this.mediaId;
+                if (this.mediaId) this.deleteId = this.mediaId;
             },
             deleteImage() {
 
@@ -164,7 +162,9 @@
 
             const {value, previewFormUrl, previewUrl} = this.field;
 
-            if(value) {
+            this.useCropper = this.field.useCropper;
+
+            if (value) {
                 this.mediaId = value.id;
                 this.original = value[previewUrl] || null;
                 this.preview = value[previewFormUrl] || value[previewUrl] || null;

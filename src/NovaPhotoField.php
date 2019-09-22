@@ -67,6 +67,11 @@ class NovaPhotoField extends Field
         }
     }
 
+    public function useCropper($useCropper)
+    {
+        return $this->withMeta(compact('useCropper'));
+    }
+
     public function params(array $params)
     {
         return $this->withMeta(['params' => $params]);
