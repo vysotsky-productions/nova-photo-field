@@ -14,14 +14,26 @@ class NovaPhotoField extends Field
      */
     public $component = 'NovaPhotoField';
 
+    public $deletable = true;
+
     public $handler;
 
-    public function __construct($name, $attribute = null, $disk = 'public')
+    /**
+     * @param bool $deletable
+     * @return NovaPhotoField
+     */
+    public function setDeletable(bool $deletable): NovaPhotoField
     {
-        parent::__construct($name, $attribute);
+//        todo:implement deletable logic only if deletable is true
+        $this->deletable = $deletable;
+        return $this;
     }
 
-    public function handleClass($handler)
+    /**
+     * @param mixed $handler
+     * @return NovaPhotoField
+     */
+    public function setHandler($handler)
     {
         $this->handler = $handler;
         return $this;
@@ -34,29 +46,24 @@ class NovaPhotoField extends Field
     {
         $cropData = json_decode($request[$attribute . "_crop_data"]);
 
-        $path = $this->meta['params']['folder'];
-        $config = $this->meta['params']['thumbs'][$path];
-
         if ($request[$attribute . "_delete_id"]) {
             $model->{$attribute}()->dissociate();
             $model->save();
-            $this->handler::delete($request[$attribute . "_delete_id"], $config, $path);
+            $this->handler->delete($request[$attribute . "_delete_id"]);
         }
 
         if ($request->file($attribute . "_file")) {
 
-            $media = $this->handler::save(
+            $media = $this->handler->save(
                 $request->file($attribute . "_file"),
-                $cropData,
-                $path,
-                $config
+                $cropData
             );
             $model->{$attribute}()->associate($media);
             $model->save();
         }
 
         if ($request[$attribute . "_update_id"] && $cropData) {
-            $this->handler::update($request[$attribute . "_update_id"], $config, $path, $cropData);
+            $this->handler->update($request[$attribute . "_update_id"], $cropData);
         }
     }
 
