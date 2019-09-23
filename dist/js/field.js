@@ -2611,6 +2611,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -2653,7 +2654,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.config.devtools = true;
     methods: {
         download: function download() {
             var link = document.createElement('a');
-            link.href = this.path;
+            link.href = this.preview || this.original;
             link.download = 'download';
             document.body.appendChild(link);
             link.click();
@@ -2669,12 +2670,11 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.config.devtools = true;
             this.cropData = cropBoxData;
             this.preview = dataUrl;
         },
-        loadPhoto: function loadPhoto(_ref2) {
+        loadPhoto: function loadPhoto(e) {
             var _this = this;
 
-            var target = _ref2.target;
-
-            var file = target.files[0];
+            var file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
+            if (!file) return;
 
             Object(__WEBPACK_IMPORTED_MODULE_3__utils_convertBlobToBase64__["a" /* convertBlobToBase64 */])(file).then(function (img) {
                 _this.original = img;
@@ -2685,7 +2685,10 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.config.devtools = true;
             });
         },
         setMediaToDelete: function setMediaToDelete() {
-            if (this.mediaId) this.deleteId = this.mediaId;
+            if (this.mediaId) {
+                this.deleteId = this.mediaId;
+                this.mediaId = null;
+            }
         },
         deleteImage: function deleteImage() {
 
@@ -30101,6 +30104,13 @@ var render = function() {
                   "border border-primary-30% flex hover:border-primary overflow-hidden rounded relative text-primary-30% hover:text-primary",
                 staticStyle: { width: "250px", height: "250px" },
                 on: {
+                  drop: function($event) {
+                    $event.preventDefault()
+                    return _vm.loadPhoto($event)
+                  },
+                  dragover: function($event) {
+                    $event.preventDefault()
+                  },
                   click: function($event) {
                     return _vm.$refs.photo.click()
                   }

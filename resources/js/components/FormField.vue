@@ -18,6 +18,7 @@
             </div>
 
             <div v-else
+                 @drop.prevent="loadPhoto" @dragover.prevent
                  class="border border-primary-30% flex hover:border-primary overflow-hidden rounded relative text-primary-30% hover:text-primary"
                  style="width: 250px; height: 250px"
                  @click="$refs.photo.click()">
@@ -130,7 +131,7 @@
         methods: {
             download() {
                 let link = document.createElement('a');
-                link.href = this.path;
+                link.href = this.preview || this.original;
                 link.download = 'download';
                 document.body.appendChild(link);
                 link.click();
@@ -143,8 +144,9 @@
                 this.cropData = cropBoxData;
                 this.preview = dataUrl;
             },
-            loadPhoto({target}) {
-                let file = target.files[0];
+            loadPhoto(e) {
+                let file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
+                if(!file) return;
 
                 convertBlobToBase64(file).then(img => {
                     this.original = img;
@@ -156,7 +158,10 @@
 
             },
             setMediaToDelete() {
-                if (this.mediaId) this.deleteId = this.mediaId;
+                if (this.mediaId) {
+                    this.deleteId = this.mediaId;
+                    this.mediaId = null
+                }
             },
             deleteImage() {
 
