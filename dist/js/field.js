@@ -2578,6 +2578,39 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2618,6 +2651,14 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.config.devtools = true;
     },
 
     methods: {
+        download: function download() {
+            var link = document.createElement('a');
+            link.href = this.path;
+            link.download = 'download';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        },
         openCropper: function openCropper() {
             this.showCropper = true;
         },
@@ -30041,75 +30082,137 @@ var render = function() {
           ? _c(
               "div",
               {
-                staticClass: "media-image_wrap mod_field-edit",
+                staticClass:
+                  "card relative card relative border border-lg border-50 overflow-hidden px-0 py-0",
+                staticStyle: { "max-width": "320px" },
+                on: { click: _vm.openCropper }
+              },
+              [
+                _c("img", {
+                  staticClass: "block w-full",
+                  attrs: { src: _vm.preview || _vm.original }
+                })
+              ]
+            )
+          : _c(
+              "div",
+              {
+                staticClass:
+                  "border border-primary-30% flex hover:border-primary overflow-hidden rounded relative text-primary-30% hover:text-primary",
+                staticStyle: { width: "250px", height: "250px" },
                 on: {
                   click: function($event) {
-                    if ($event.target !== $event.currentTarget) {
-                      return null
-                    }
-                    return _vm.openCropper($event)
+                    return _vm.$refs.photo.click()
                   }
                 }
               },
               [
-                _c("img", {
-                  staticClass: "media-image",
-                  attrs: { src: _vm.preview || _vm.original }
-                }),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass: "media-image_delete",
-                    on: {
-                      click: function($event) {
-                        $event.stopPropagation()
-                        return _vm.deleteImage($event)
+                _c("icon", {
+                  staticClass: "m-auto",
+                  attrs: { type: "add", width: "50", height: "50" }
+                })
+              ],
+              1
+            ),
+        _vm._v(" "),
+        _vm.preview || _vm.original
+          ? _c("p", { staticClass: "flex items-center text-sm mt-3" }, [
+              _vm.field.downloadable
+                ? _c(
+                    "a",
+                    {
+                      staticClass:
+                        "cursor-pointer dim btn btn-link text-primary inline-flex items-center",
+                      attrs: {
+                        href: _vm.preview || _vm.original,
+                        tabindex: "0"
+                      },
+                      on: {
+                        keydown: function($event) {
+                          if (
+                            !$event.type.indexOf("key") &&
+                            _vm._k(
+                              $event.keyCode,
+                              "enter",
+                              13,
+                              $event.key,
+                              "Enter"
+                            )
+                          ) {
+                            return null
+                          }
+                          $event.preventDefault()
+                          return _vm.download($event)
+                        },
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.download($event)
+                        }
                       }
-                    }
-                  },
-                  [
-                    _c("icon", {
-                      attrs: { type: "delete", width: "14", height: "14" }
-                    })
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "a",
-                  {
-                    staticClass: "media-image_download",
-                    attrs: { href: _vm.downloadPath, download: "" },
-                    on: {
-                      click: function($event) {
-                        $event.stopPropagation()
-                      }
-                    }
-                  },
-                  [
-                    _c("icon", {
-                      attrs: { type: "download", width: "12", height: "13.5" }
-                    })
-                  ],
-                  1
-                )
-              ]
-            )
-          : _c("div", { staticClass: "avatar-uploader add-image" }, [
+                    },
+                    [
+                      _c("icon", {
+                        staticClass: "mr-2",
+                        attrs: {
+                          type: "download",
+                          "view-box": "0 0 24 24",
+                          width: "16",
+                          height: "16"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("span", { staticClass: "class mt-1" }, [
+                        _vm._v(_vm._s(_vm.__("Download")))
+                      ])
+                    ],
+                    1
+                  )
+                : _vm._e(),
+              _vm._v(" "),
               _c(
-                "div",
+                "button",
                 {
-                  staticClass: "add-image_container",
+                  staticClass:
+                    "cursor-pointer dim btn btn-link inline-flex items-center text-danger ml-8",
+                  attrs: { type: "button", tabindex: "0" },
                   on: {
+                    keydown: function($event) {
+                      if (
+                        !$event.type.indexOf("key") &&
+                        _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                      ) {
+                        return null
+                      }
+                      $event.preventDefault()
+                      return _vm.deleteImage($event)
+                    },
                     click: function($event) {
-                      return _vm.$refs.photo.click()
+                      $event.preventDefault()
+                      return _vm.deleteImage($event)
                     }
                   }
                 },
-                [_c("span", { staticClass: "add-image_plus" }, [_vm._v("+")])]
+                [
+                  _c("icon", {
+                    staticClass: "mr-2",
+                    attrs: {
+                      type: "delete",
+                      "view-box": "0 0 20 20",
+                      width: "16",
+                      height: "16"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "class mt-1" }, [
+                    _vm._v(_vm._s(_vm.__("Delete")))
+                  ]),
+                  _vm._v(" "),
+                  _vm._t("default")
+                ],
+                2
               )
             ])
+          : _vm._e()
       ]),
       _vm._v(" "),
       _vm.showCropper && _vm.original && _vm.useCropper

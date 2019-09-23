@@ -9,28 +9,61 @@
         <input type="file" ref="photo" style="display: none;" @change="loadPhoto">
 
         <div class="py-6 px-8 w-4/5">
-            <div @click.self="openCropper" class="media-image_wrap mod_field-edit" v-if="original">
-                <img class="media-image" :src="preview || original">
+            <div v-if="original"
+                 @click="openCropper"
+                 style="max-width: 320px"
+                 class="card relative card relative border border-lg border-50 overflow-hidden px-0 py-0"
+            >
+                <img class="block w-full" :src="preview || original">
+            </div>
 
-                <div class="media-image_delete" @click.stop="deleteImage">
-                    <icon type="delete" width="14" height="14"/>
-                </div>
-
-
-                <a :href="downloadPath" download class="media-image_download" @click.stop>
-                    <icon type="download" width="12" height="13.5"/>
+            <div v-else
+                 class="border border-primary-30% flex hover:border-primary overflow-hidden rounded relative text-primary-30% hover:text-primary"
+                 style="width: 250px; height: 250px"
+                 @click="$refs.photo.click()">
+                <icon type="add" width="50" height="50" class="m-auto"/>
+            </div>
+            <p v-if="preview || original" class="flex items-center text-sm mt-3">
+                <a
+                        :href="preview || original"
+                        v-if="field.downloadable"
+                        @keydown.enter.prevent="download"
+                        @click.prevent="download"
+                        tabindex="0"
+                        class="cursor-pointer dim btn btn-link text-primary inline-flex items-center"
+                >
+                    <icon
+                            class="mr-2"
+                            type="download"
+                            view-box="0 0 24 24"
+                            width="16"
+                            height="16"
+                    ></icon>
+                    <span class="class mt-1">{{ __('Download') }}</span>
                 </a>
-
-            </div>
-
-            <div class="avatar-uploader add-image" v-else>
-
-
-                <div class="add-image_container" @click="$refs.photo.click()">
-                    <span class="add-image_plus">+</span>
-                </div>
-            </div>
+                <button
+                        type="button"
+                        @keydown.enter.prevent="deleteImage"
+                        @click.prevent="deleteImage"
+                        tabindex="0"
+                        class="cursor-pointer dim btn btn-link inline-flex items-center text-danger ml-8"
+                >
+                    <icon type="delete" class="mr-2" view-box="0 0 20 20" width="16" height="16"/>
+                    <span class="class mt-1">{{ __('Delete') }}</span>
+                    <slot/>
+                </button>
+            </p>
         </div>
+
+
+        <!--<div class="media-image_delete" @click.stop="deleteImage">-->
+        <!--<icon type="delete" width="14" height="14"/>-->
+        <!--</div>-->
+
+
+        <!--<a :href="downloadPath" download class="media-image_download" @click.stop>-->
+        <!--<icon type="download" width="12" height="13.5"/>-->
+        <!--</a>-->
 
         <cropper v-if="showCropper && original && useCropper"
                  :img-src="original"
@@ -95,6 +128,14 @@
             }
         },
         methods: {
+            download() {
+                let link = document.createElement('a');
+                link.href = this.path;
+                link.download = 'download';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            },
             openCropper() {
                 this.showCropper = true;
             },
