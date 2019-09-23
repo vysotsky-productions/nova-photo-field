@@ -10,6 +10,7 @@
                         :scalable="false"
                         :zoomable="false"
                         :movable="false"
+                        :aspectRatio="aspectRatio"
                         :src="imgSrc"
                         alt="Source Image"
                 >
@@ -29,7 +30,7 @@
     //
     export default {
         components: {VueCropper},
-        props: ['imgSrc', 'extension'],
+        props: ['imgSrc', 'extension', 'aspectRatio'],
 
         methods: {
             handleCrop() {

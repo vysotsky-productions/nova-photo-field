@@ -35,6 +35,7 @@
         <cropper v-if="showCropper && original && useCropper"
                  :img-src="original"
                  :extension="extension"
+                 :aspectRatio="aspectRatio"
                  @cropped="saveNewCropData"
                  @close="showCropper = false"
         ></cropper>
@@ -84,6 +85,7 @@
                 name: false,
 
                 useCropper: false,
+                aspectRatio: null,
 
                 newPhoto: null,
                 cropData: null,
@@ -163,6 +165,7 @@
             const {value, previewFormUrl, previewUrl} = this.field;
 
             this.useCropper = this.field.useCropper;
+            this.aspectRatio = this.field.aspectRatio;
 
             if (value) {
                 this.mediaId = value.id;

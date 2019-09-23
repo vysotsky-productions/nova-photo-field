@@ -16,6 +16,10 @@ class NovaPhotoField extends Field
 
     public $deletable = true;
 
+    public $downloadable = true;
+
+    public $useCropper = true;
+
     public $handler;
 
     /**
@@ -36,6 +40,32 @@ class NovaPhotoField extends Field
     public function setHandler($handler)
     {
         $this->handler = $handler;
+        return $this;
+    }
+
+    /**
+     * @param bool $downloadable
+     * @return NovaPhotoField
+     */
+    public function setDownloadable(bool $downloadable): NovaPhotoField
+    {
+        $this->downloadable = $downloadable;
+        return $this;
+    }
+
+    /**
+     * @return NovaPhotoField
+     */
+    public function disableCropper(): NovaPhotoField
+    {
+        $this->useCropper = false;
+        return $this;
+    }
+
+    public function disableDownload()
+    {
+        $this->downloadable = false;
+
         return $this;
     }
 
@@ -67,9 +97,10 @@ class NovaPhotoField extends Field
         }
     }
 
-    public function useCropper($useCropper)
+
+    public function aspectRatio(float $aspectRatio)
     {
-        return $this->withMeta(compact('useCropper'));
+        return $this->withMeta(compact('aspectRatio'));
     }
 
     public function params(array $params)
@@ -95,5 +126,20 @@ class NovaPhotoField extends Field
     public function getPhotoIndex(string $previewIndexUrl = null)
     {
         return $this->withMeta(compact('previewIndexUrl'));
+    }
+
+
+    /**
+     * Prepare the field for JSON serialization.
+     *
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return array_merge(parent::jsonSerialize(), [
+            'downloadable' => $this->downloadable && ! empty($this->value),
+            'deletable' =>  $this->deletable,
+            'useCropper' => $this->useCropper
+        ]);
     }
 }

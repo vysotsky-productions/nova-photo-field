@@ -10,12 +10,15 @@
 
         data() {
             return {
-                path: ""
+                path: null
             }
         },
 
         mounted() {
-            this.path = this.field.value[this.field.previewIndexUrl] || this.field.value[this.field.previewUrl] || null;
+            const {value, previewIndexUrl, previewUrl} = this.field;
+            if (value) {
+                this.path = value[previewIndexUrl] || value[previewUrl];
+            }
         },
 
         computed: {}
