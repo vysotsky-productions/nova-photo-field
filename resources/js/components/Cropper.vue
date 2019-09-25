@@ -2,21 +2,24 @@
     <div>
 
         <modal @modal-close="closeModal">
-            <card class="text-center m-2 bg-white rounded-lg max-w-2xl p-view shadow-lg overflow-hidden">
-                <vue-cropper
-                        ref="cropper"
-                        :view-mode="1"
-                        :rotatable="false"
-                        :scalable="false"
-                        :zoomable="false"
-                        :movable="false"
-                        :aspectRatio="aspectRatio"
-                        :src="imgSrc"
-                        alt="Source Image"
+            <card class="text-center m-2 mb-0 bg-white rounded-lg max-w-2xl p-view shadow-lg overflow-hidden test">
+
+                <vue-cropper class="cropper-wrapper"
+                             ref="cropper"
+                             :view-mode="1"
+                             :rotatable="false"
+                             :scalable="false"
+                             :zoomable="false"
+                             :movable="false"
+                             :aspectRatio="aspectRatio"
+                             :src="imgSrc"
+                             :background="false"
+                             alt="Source Image"
                 >
                 </vue-cropper>
 
-                <div class="actions m-8">
+
+                <div class="actions mt-8">
                     <button @click.prevent="handleCrop" class="btn btn-default btn-primary">Обрезать</button>
                     <button @click.prevent="exitFromCropper" class="btn btn-default btn-primary">Отмена</button>
                 </div>
@@ -55,4 +58,12 @@
 </script>
 <style lang="scss">
 
+    .cropper-wrapper {
+        max-width:  80vw !important;
+        max-height: 60vh !important;
+    }
+
+    img {
+        max-width: 100%; /* This rule is very important, please do not ignore this! */
+    }
 </style>

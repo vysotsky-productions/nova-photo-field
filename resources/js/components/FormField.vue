@@ -12,9 +12,9 @@
             <div v-if="original"
                  @click="openCropper"
                  style="max-width: 320px"
-                 class="card relative card relative border border-lg border-50 overflow-hidden px-0 py-0"
+                 class="card relative card relative border border-lg border-50 overflow-hidden px-2 py-2 inline-block"
             >
-                <img class="block w-full" :src="preview || original">
+                <img :src="preview || original" class="image-preview">
             </div>
 
             <div v-else
@@ -24,6 +24,7 @@
                  @click="$refs.photo.click()">
                 <icon type="add" width="50" height="50" class="m-auto"/>
             </div>
+
             <p v-if="preview || original" class="flex items-center text-sm mt-3">
                 <a
                         :href="preview || original"
@@ -42,6 +43,19 @@
                     ></icon>
                     <span class="class mt-1">{{ __('Download') }}</span>
                 </a>
+
+                <button
+                        type="edit"
+                        @keydown.enter.prevent="openCropper"
+                        @click.prevent="openCropper"
+                        tabindex="0"
+                        class="cursor-pointer dim btn btn-link inline-flex items-center text-primary ml-8"
+                >
+                    <icon type="edit" class="mr-2" view-box="0 0 20 20" width="16" height="16"/>
+                    <span class="class mt-1">{{ __('Crop') }}</span>
+                    <slot/>
+                </button>
+
                 <button
                         type="button"
                         @keydown.enter.prevent="deleteImage"
@@ -146,7 +160,7 @@
             },
             loadPhoto(e) {
                 let file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
-                if(!file) return;
+                if (!file) return;
 
                 convertBlobToBase64(file).then(img => {
                     this.original = img;
@@ -220,6 +234,14 @@
             }
         }
     }
-
-
 </script>
+
+<style scoped>
+    .image-preview {
+        width: 280px;
+        height: 280px;
+
+        object-fit: contain;
+        object-position: center;
+    }
+</style>

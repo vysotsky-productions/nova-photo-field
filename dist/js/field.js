@@ -2465,17 +2465,21 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(63)
+}
 var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(39)
 /* template */
-var __vue_template__ = __webpack_require__(60)
+var __vue_template__ = __webpack_require__(65)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = null
+var __vue_scopeId__ = "data-v-c023248a"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -2521,6 +2525,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Cropper___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__Cropper__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_convertBlobToBase64__ = __webpack_require__(58);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_getFileExtension__ = __webpack_require__(59);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -25261,7 +25279,7 @@ var content = __webpack_require__(47);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(48)("1ed787da", content, false, {});
+var update = __webpack_require__(48)("74263e60", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -25285,7 +25303,7 @@ exports = module.exports = __webpack_require__(12)(false);
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, "\n.cropper-wrapper {\n  max-width: 80vw !important;\n  max-height: 60vh !important;\n}\nimg {\n  max-width: 100%;\n  /* This rule is very important, please do not ignore this! */\n}\n", ""]);
 
 // exports
 
@@ -25561,6 +25579,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_cropperjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_cropperjs__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_cropperjs_dist_cropper_css__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_cropperjs_dist_cropper_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_cropperjs_dist_cropper_css__);
+//
+//
+//
 //
 //
 //
@@ -29960,11 +29981,12 @@ var render = function() {
             "card",
             {
               staticClass:
-                "text-center m-2 bg-white rounded-lg max-w-2xl p-view shadow-lg overflow-hidden"
+                "text-center m-2 mb-0 bg-white rounded-lg max-w-2xl p-view shadow-lg overflow-hidden test"
             },
             [
               _c("vue-cropper", {
                 ref: "cropper",
+                staticClass: "cropper-wrapper",
                 attrs: {
                   "view-mode": 1,
                   rotatable: false,
@@ -29973,11 +29995,12 @@ var render = function() {
                   movable: false,
                   aspectRatio: _vm.aspectRatio,
                   src: _vm.imgSrc,
+                  background: false,
                   alt: "Source Image"
                 }
               }),
               _vm._v(" "),
-              _c("div", { staticClass: "actions m-8" }, [
+              _c("div", { staticClass: "actions mt-8" }, [
                 _c(
                   "button",
                   {
@@ -30054,7 +30077,55 @@ function getFileExtension(filename) {
 }
 
 /***/ }),
-/* 60 */
+/* 60 */,
+/* 61 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 62 */,
+/* 63 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(64);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(48)("48e4f680", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-c023248a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./FormField.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-c023248a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./FormField.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(12)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.image-preview[data-v-c023248a] {\n    width: 280px;\n    height: 280px;\n\n    -o-object-fit: contain;\n\n       object-fit: contain;\n    -o-object-position: center;\n       object-position: center;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -30086,13 +30157,13 @@ var render = function() {
               "div",
               {
                 staticClass:
-                  "card relative card relative border border-lg border-50 overflow-hidden px-0 py-0",
+                  "card relative card relative border border-lg border-50 overflow-hidden px-2 py-2 inline-block",
                 staticStyle: { "max-width": "320px" },
                 on: { click: _vm.openCropper }
               },
               [
                 _c("img", {
-                  staticClass: "block w-full",
+                  staticClass: "image-preview",
                   attrs: { src: _vm.preview || _vm.original }
                 })
               ]
@@ -30178,6 +30249,49 @@ var render = function() {
                     1
                   )
                 : _vm._e(),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass:
+                    "cursor-pointer dim btn btn-link inline-flex items-center text-primary ml-8",
+                  attrs: { type: "edit", tabindex: "0" },
+                  on: {
+                    keydown: function($event) {
+                      if (
+                        !$event.type.indexOf("key") &&
+                        _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                      ) {
+                        return null
+                      }
+                      $event.preventDefault()
+                      return _vm.openCropper($event)
+                    },
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.openCropper($event)
+                    }
+                  }
+                },
+                [
+                  _c("icon", {
+                    staticClass: "mr-2",
+                    attrs: {
+                      type: "edit",
+                      "view-box": "0 0 20 20",
+                      width: "16",
+                      height: "16"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "class mt-1" }, [
+                    _vm._v(_vm._s(_vm.__("Crop")))
+                  ]),
+                  _vm._v(" "),
+                  _vm._t("default")
+                ],
+                2
+              ),
               _vm._v(" "),
               _c(
                 "button",
@@ -30299,12 +30413,6 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-c023248a", module.exports)
   }
 }
-
-/***/ }),
-/* 61 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);
