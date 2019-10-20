@@ -15,6 +15,11 @@ class FieldServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
+        $this->publishes([
+            __DIR__ . '/config/nova-photo-field.php' => config_path('nova-photo-field.php'),
+        ], 'nova-photo-field');
+
         Nova::serving(function (ServingNova $event) {
             Nova::script('NovaPhotoField', __DIR__ . '/../dist/js/field.js');
             Nova::style('NovaPhotoField', __DIR__ . '/../dist/css/field.css');

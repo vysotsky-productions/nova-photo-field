@@ -24,6 +24,25 @@ class NovaPhotoField extends Field
 
     public $showOnCreation = false;
 
+    /*photo_path_attributes*/
+
+    public $previewUrl = null;
+    public $previewFormUrl = null;
+    public $previewIndexUrl = null;
+    public $previewDetailUrl = null;
+    public $cropBoxDataAttribute = null;
+
+    public function __construct($name, $attribute)
+    {
+        parent::__construct($name, $attribute);
+
+        $this->previewUrl = config('nova-photo-field.photo_path_attributes.original_attribute');
+        $this->previewFormUrl = config('nova-photo-field.photo_path_attributes.form_preview_attribute');
+        $this->previewIndexUrl = config('nova-photo-field.photo_path_attributes.index_preview_attribute');
+        $this->previewDetailUrl = config('nova-photo-field.photo_path_attributes.detail_preview_attribute');
+        $this->cropBoxDataAttribute = config('nova-photo-field.cropper.crop_data_attribute');
+    }
+
     /**
      * @param bool $deletable
      * @return NovaPhotoField
@@ -112,29 +131,34 @@ class NovaPhotoField extends Field
         return $this->withMeta(['params' => $params]);
     }
 
-    public function getPhoto(string $previewUrl = null)
+    public function getPhoto(string $previewUrl)
     {
-        return $this->withMeta(compact('previewUrl'));
+        $this->previewUrl = $previewUrl;
+        return $this;
     }
 
-    public function getPhotoDetail(string $previewDetailUrl = null)
+    public function getPhotoDetail(string $previewDetailUrl)
     {
-        return $this->withMeta(compact('previewDetailUrl'));
+        $this->previewDetailUrl = $previewDetailUrl;
+        return $this;
     }
 
-    public function getPhotoForm(string $previewFormUrl = null)
+    public function getPhotoForm(string $previewFormUrl)
     {
-        return $this->withMeta(compact('previewFormUrl'));
+        $this->previewFormUrl = $previewFormUrl;
+        return $this;
     }
 
-    public function getPhotoIndex(string $previewIndexUrl = null)
+    public function getPhotoIndex(string $previewIndexUrl)
     {
-        return $this->withMeta(compact('previewIndexUrl'));
+        $this->previewIndexUrl = $previewIndexUrl;
+        return $this;
     }
 
     public function getCropBoxData(string $cropData = null)
     {
-        return $this->withMeta(compact('cropData'));
+        $this->cropData = $cropData;
+        return $this;
     }
 
 
@@ -148,7 +172,12 @@ class NovaPhotoField extends Field
         return array_merge(parent::jsonSerialize(), [
             'downloadable' => $this->downloadable && !empty($this->value),
             'deletable' => $this->deletable,
-            'useCropper' => $this->useCropper
+            'useCropper' => $this->useCropper,
+            'previewUrl' => $this->previewUrl,
+            'previewDetailUrl' => $this->previewDetailUrl,
+            'previewFormUrl' => $this->previewFormUrl,
+            'previewIndexUrl' => $this->previewIndexUrl,
+            'cropData' => $this->cropBoxDataAttribute
         ]);
     }
 }
