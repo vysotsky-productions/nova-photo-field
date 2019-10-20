@@ -4,56 +4,56 @@
             {{field.name}}
         </label></div>
         <div class="w-3/4 py-4">
-            <div class="media-image_wrap mod_field-detail" v-if="croppedMedia">
+            <div class="media-image_wrap mod_field-detail rounded overflow-hidden">
                 <img class="media-image" :src="path" v-if="path">
-                <a :href="downloadPath" download class="media-image_download" @click.stop>
-                    <i class="el-icon-download"></i>
-                </a>
             </div>
+            <p v-if="path" class="flex items-center text-sm mt-3">
+                <a
+                        :href="path"
+                        v-if="field.downloadable"
+                        @keydown.enter.prevent="download"
+                        @click.prevent="download"
+                        tabindex="0"
+                        class="cursor-pointer dim btn btn-link text-primary inline-flex items-center"
+                >
+                    <icon
+                            class="mr-2"
+                            type="download"
+                            view-box="0 0 24 24"
+                            width="16"
+                            height="16"
+                    ></icon>
+                    <span class="class mt-1">{{ __('Download') }}</span>
+                </a>
+            </p>
         </div>
     </div>
 </template>
 
 <script>
-    import axios from 'axios';
 
     export default {
         props: ['resource', 'resourceName', 'resourceId', 'field'],
         data() {
             return {
                 path: null,
-                croppedMedia: false,
+            }
+        },
+        mounted() {
+            const {value, previewDetailUrl, previewUrl} = this.field;
+            if (value) {
+                this.path = value[previewDetailUrl] || value[previewUrl];
             }
         },
         methods: {
-            loadImage() {
-                if (this.resourceId) {
-                    let data = {
-                        resourceId: this.resourceId,
-                        path: this.field.params.path,
-                        resourceModelName: this.field.params.resourceModelName,
-                        relation: this.field.params.relation
-                    };
-
-                    axios.post('/api/media-field/get', data).then((response) => {
-                        this.croppedMedia = response.data;
-                    });
-                }
+            download() {
+                let link = document.createElement('a');
+                link.href = this.path;
+                link.download = 'download';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
             },
         },
-        created() {
-            this.loadImage();
-        },
-        mounted() {
-            this.path = this.field.value[this.field.previewDetailUrl] || this.field.value[this.field.previewUrl] || null;
-        },
-        computed: {
-            thumbPath() {
-                return `/thumbs/${this.field.params.thumbs.adminThumbFolder}/`;
-            },
-            downloadPath() {
-                return '/storage/' + this.croppedMedia.path + '/' + this.croppedMedia.name;
-            }
-        }
     }
 </script>

@@ -9,32 +9,85 @@
         <input type="file" ref="photo" style="display: none;" @change="loadPhoto">
 
         <div class="py-6 px-8 w-4/5">
-            <div class="media-image_wrap mod_field-edit" v-if="path || tmpUrl">
-                <img class="media-image" :src="path || tmpUrl">
+            <div v-if="original"
+                 @click="openCropper"
+                 style="max-width: 320px"
+                 class="card relative card relative border border-lg border-50 overflow-hidden px-2 py-2 inline-block"
+            >
+                <img :src="preview || original" class="image-preview">
+            </div>
 
-                <div class="media-image_delete" @click.stop="deleteImage">
-                    <icon type="delete" width="14" height="14"/>
-                </div>
+            <div v-else
+                 @drop.prevent="loadPhoto" @dragover.prevent
+                 class="border border-primary-30% flex hover:border-primary overflow-hidden rounded relative text-primary-30% hover:text-primary"
+                 style="width: 250px; height: 250px"
+                 @click="$refs.photo.click()">
+                <icon type="add" width="50" height="50" class="m-auto"/>
+            </div>
 
-
-                <a :href="downloadPath" download class="media-image_download" @click.stop>
-                    <icon type="download" width="12" height="13.5"/>
+            <p v-if="preview || original" class="flex items-center text-sm mt-3">
+                <a
+                        :href="preview || original"
+                        v-if="field.downloadable"
+                        @keydown.enter.prevent="download"
+                        @click.prevent="download"
+                        tabindex="0"
+                        class="cursor-pointer dim btn btn-link text-primary inline-flex items-center"
+                >
+                    <icon
+                            class="mr-2"
+                            type="download"
+                            view-box="0 0 24 24"
+                            width="16"
+                            height="16"
+                    ></icon>
+                    <span class="class mt-1">{{ __('Download') }}</span>
                 </a>
 
-                <media-loading :loading="loading"></media-loading>
-            </div>
+                <button
+                        type="edit"
+                        @keydown.enter.prevent="openCropper"
+                        @click.prevent="openCropper"
+                        tabindex="0"
+                        class="cursor-pointer dim btn btn-link inline-flex items-center text-primary ml-8"
+                >
+                    <icon type="edit" class="mr-2" viewBox="0 0 20 20" width="16" height="16"/>
+                    <span class="class mt-1">{{ __('Crop') }}</span>
+                    <slot/>
+                </button>
 
-            <div class="avatar-uploader add-image" v-else>
-
-
-                <div class="add-image_container" @click="$refs.photo.click()">
-                    <span class="add-image_plus">+</span>
-                </div>
-            </div>
+                <button
+                        type="button"
+                        @keydown.enter.prevent="deleteImage"
+                        @click.prevent="deleteImage"
+                        tabindex="0"
+                        class="cursor-pointer dim btn btn-link inline-flex items-center text-danger ml-8"
+                >
+                    <icon type="delete" class="mr-2" view-box="0 0 20 20" width="16" height="16"/>
+                    <span class="class mt-1">{{ __('Delete') }}</span>
+                    <slot/>
+                </button>
+            </p>
         </div>
 
 
-        <!--<Cropper :cropperName="cropperName" :typeResource="typeResource"></Cropper>-->
+        <!--<div class="media-image_delete" @click.stop="deleteImage">-->
+        <!--<icon type="delete" width="14" height="14"/>-->
+        <!--</div>-->
+
+
+        <!--<a :href="downloadPath" download class="media-image_download" @click.stop>-->
+        <!--<icon type="download" width="12" height="13.5"/>-->
+        <!--</a>-->
+
+        <cropper v-if="showCropper && original && useCropper"
+                 :img-src="original"
+                 :crop-data="cropData || {}"
+                 :extension="extension"
+                 :aspectRatio="aspectRatio"
+                 @cropped="saveNewCropData"
+                 @close="showCropper = false"
+        ></cropper>
 
         <div style="display: none;visibility: hidden;opacity: 0">
             <default-field :field="field" :errors="errors">
@@ -57,19 +110,14 @@
     Vue.config.devtools = true;
 
     import {FormField, HandlesValidationErrors} from 'laravel-nova'
-    import MediaLoading from "./MediaLoading";
 
-    const convertBlobToBase64 = blob => new Promise((resolve, reject) => {
-        const reader = new FileReader;
-        reader.onerror = reject;
-        reader.onload = () => {
-            resolve(reader.result);
-        };
-        reader.readAsDataURL(blob);
-    });
+    import Cropper from "./Cropper"
+    import {convertBlobToBase64} from "../utils/convertBlobToBase64";
+    import getFileExtension from "../utils/getFileExtension";
+
 
     export default {
-        components: {MediaLoading},
+        components: {Cropper},
 
         mixins: [FormField, HandlesValidationErrors],
 
@@ -77,30 +125,68 @@
 
         data() {
             return {
-                path: null,
-                tmpUrl: null,
-                croppedMedia: false,
-                loading: false,
-                typeResource: 'mediaField',
+                mediaId: null,
+
+                original: null,
+                preview: null,
+
                 value: false,
-                name: false
+                name: false,
+
+                useCropper: false,
+                aspectRatio: null,
+
+                newPhoto: null,
+                cropData: null,
+                showCropper: false,
+
+                deleteId: null,
             }
         },
         methods: {
-            loadPhoto(event) {
-                console.log(1);
+            download() {
+                let link = document.createElement('a');
+                link.href = this.preview || this.original;
+                link.download = 'download';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            },
+            openCropper() {
+                this.showCropper = true;
+            },
+            saveNewCropData({cropBoxData, dataUrl}) {
+                this.cropData = cropBoxData;
+                this.preview = dataUrl;
+            },
+            loadPhoto(e) {
+                let file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
+                if (!file) return;
 
-                convertBlobToBase64(event.target.files[0]).then(img => {
-                    console.log(img);
-                    this.tmpUrl = img;
+                convertBlobToBase64(file).then(img => {
+                    this.original = img;
+                    this.preview = img;
+                    this.newPhoto = file;
+                    this.extension = getFileExtension(file.name)
                 });
 
             },
+            setMediaToDelete() {
+                if (this.mediaId) {
+                    this.deleteId = this.mediaId;
+                    this.mediaId = null
+                }
+            },
             deleteImage() {
-                this.path = null;
-                this.tmpUrl = null;
 
-                console.log(this.$refs);
+                this.setMediaToDelete();
+
+                this.original = null;
+                this.preview = null;
+
+                this.newPhoto = null;
+                this.cropData = null;
+                this.extension = null;
 
                 this.$refs.photo.value = null;
 
@@ -110,46 +196,14 @@
                 }
 
             },
-            upload(file) {  // upload file && move data to cropper
-                if (file) {
-                    let reader = new FileReader();
-                    reader.onload = (event) => {
-                        Nova.$emit(this.cropperName, {
-                            fileRead: event.target.result, // dataURl new image
-                            originalFile: file.file, // original new image
-                            ratio: this.field.params.ratio,
-                            width: 1920,
-                            height: 1080,
-                            path: this.field.params.path,
-                            croppedMediaParams: null,
-                            croppedMediaId: false,
-                            title: '',
-                            alt: ''
-                        });
-                    };
-                    reader.readAsDataURL(file.file);
-                }
-            },
-            changeCrop() { // move cropped file && data to cropper
-                Nova.$emit(this.cropperName, {
-                    fileRead: '/storage/' + this.croppedMedia.path + '/' + this.croppedMedia.name, // old original file, has in storage
-                    originalFile: false,
-                    ratio: this.field.params.ratio,
-                    width: 1920,
-                    height: 1080,
-                    path: this.field.params.path,
-                    croppedMediaParams: JSON.parse(this.croppedMedia.cropped_params),
-                    croppedMediaId: this.croppedMedia.id,
-                    title: this.croppedMedia.title,
-                    alt: this.croppedMedia.alt
-                });
-            },
-
             /**
              * Fill the given FormData object with the field's internal value.
              */
             fill(formData) {
-                formData.append(this.field.attribute, this.value || '');
+                formData.append(`${this.field.attribute}_crop_data`, this.requestData || '');
+                formData.append(`${this.field.attribute}_file`, this.newPhoto || '');
+                formData.append(`${this.field.attribute}_delete_id`, this.deleteId || '');
+                formData.append(`${this.field.attribute}_update_id`, this.mediaId || '');
             },
 
             /**
@@ -160,29 +214,33 @@
             },
         },
         computed: {
-            cropperName() {
-                return 'cropper_MediaField_' + this.field.params.relation +
-                    this.field.params.resourceModelName +
-                    this.resourceId;
-            },
-            thumbPath() {
-                return `/thumbs/${this.field.params.thumbs.adminThumbFolder}/`;
-            },
-            downloadPath() {
-                return '/storage/' + this.croppedMedia.path + '/' + this.croppedMedia.name;
+            requestData() {
+                return JSON.stringify(this.cropData)
             }
+
         },
         mounted() {
-            this.path = this.field.value[this.field.previewFormUrl] || this.field.value[this.field.previewUrl] || null;
+            const {value, previewFormUrl, previewUrl, cropData} = this.field;
 
-            Nova.$on(this.typeResource + '-save_' + this.cropperName, (data) => {
-                this.loading = true;
-                this.handleChange(data.media.id);
-                this.croppedMedia = data.media;
-                this.loading = false;
-            });
+            this.useCropper = this.field.useCropper;
+            this.aspectRatio = this.field.aspectRatio;
+
+            if (value) {
+                this.mediaId = value.id;
+                this.original = value[previewUrl] || null;
+                this.preview = value[previewFormUrl] || value[previewUrl] || null;
+                this.cropData = value[cropData];
+            }
         }
     }
-
-
 </script>
+
+<style scoped>
+    .image-preview {
+        width: 280px;
+        height: 280px;
+
+        object-fit: contain;
+        object-position: center;
+    }
+</style>
