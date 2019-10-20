@@ -79,7 +79,9 @@ class NovaPhotoField extends Field
         if ($request[$attribute . "_delete_id"]) {
             $model->{$attribute}()->dissociate();
             $model->save();
-            $this->handler->delete($request[$attribute . "_delete_id"]);
+            if ($this->deletable) {
+                $this->handler->delete($request[$attribute . "_delete_id"]);
+            }
         }
 
         if ($request->file($attribute . "_file")) {
@@ -137,8 +139,8 @@ class NovaPhotoField extends Field
     public function jsonSerialize()
     {
         return array_merge(parent::jsonSerialize(), [
-            'downloadable' => $this->downloadable && ! empty($this->value),
-            'deletable' =>  $this->deletable,
+            'downloadable' => $this->downloadable && !empty($this->value),
+            'deletable' => $this->deletable,
             'useCropper' => $this->useCropper
         ]);
     }
