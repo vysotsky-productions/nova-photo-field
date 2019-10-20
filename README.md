@@ -1,5 +1,10 @@
 # nova-photo-field
 
+##installation
+
+composer require vysotsky-productions/nova-photo-field
+php artisan vendor:publish --tag=nova-photo-field
+
 ```
             NovaPhotoField::make('Превью', 'preview')
                 ->aspectRatio(3/4)
