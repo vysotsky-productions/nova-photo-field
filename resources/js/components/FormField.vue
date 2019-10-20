@@ -51,7 +51,7 @@
                         tabindex="0"
                         class="cursor-pointer dim btn btn-link inline-flex items-center text-primary ml-8"
                 >
-                    <icon type="edit" class="mr-2" view-box="0 0 20 20" width="16" height="16"/>
+                    <icon type="edit" class="mr-2" viewBox="0 0 20 20" width="16" height="16"/>
                     <span class="class mt-1">{{ __('Crop') }}</span>
                     <slot/>
                 </button>
@@ -82,6 +82,7 @@
 
         <cropper v-if="showCropper && original && useCropper"
                  :img-src="original"
+                 :crop-data="cropData || {}"
                  :extension="extension"
                  :aspectRatio="aspectRatio"
                  @cropped="saveNewCropData"
@@ -167,7 +168,6 @@
                     this.preview = img;
                     this.newPhoto = file;
                     this.extension = getFileExtension(file.name)
-                    console.log(this.newPhoto)
                 });
 
             },
@@ -220,9 +220,7 @@
 
         },
         mounted() {
-            console.log(this.field)
-
-            const {value, previewFormUrl, previewUrl} = this.field;
+            const {value, previewFormUrl, previewUrl, cropData} = this.field;
 
             this.useCropper = this.field.useCropper;
             this.aspectRatio = this.field.aspectRatio;
@@ -231,6 +229,7 @@
                 this.mediaId = value.id;
                 this.original = value[previewUrl] || null;
                 this.preview = value[previewFormUrl] || value[previewUrl] || null;
+                this.cropData = value[cropData];
             }
         }
     }

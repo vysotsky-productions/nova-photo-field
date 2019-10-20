@@ -33,9 +33,20 @@
     //
     export default {
         components: {VueCropper},
-        props: ['imgSrc', 'extension', 'aspectRatio'],
-
+        props: ['imgSrc', 'extension', 'aspectRatio', 'cropData'],
+        mounted() {
+            const handler = () => {
+                this.handleSetCropData(this.$refs.cropper, this.cropData)
+            };
+            document.addEventListener('ready', handler);
+            this.$on('hook:destroyed', () => {
+                document.removeEventListener('ready', handler)
+            })
+        },
         methods: {
+            handleSetCropData(cropper, data) {
+                cropper.setData(data);
+            },
             handleCrop() {
 
                 let cropResult = {

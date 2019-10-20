@@ -22,6 +22,8 @@ class NovaPhotoField extends Field
 
     public $handler;
 
+    public $showOnCreation = false;
+
     /**
      * @param bool $deletable
      * @return NovaPhotoField
@@ -74,7 +76,7 @@ class NovaPhotoField extends Field
                                                 $model,
                                                 $attribute)
     {
-        $cropData = json_decode($request[$attribute . "_crop_data"]);
+        $cropData = json_decode($request[$attribute . "_crop_data"], true);
 
         if ($request[$attribute . "_delete_id"]) {
             $model->{$attribute}()->dissociate();
@@ -128,6 +130,11 @@ class NovaPhotoField extends Field
     public function getPhotoIndex(string $previewIndexUrl = null)
     {
         return $this->withMeta(compact('previewIndexUrl'));
+    }
+
+    public function getCropBoxData(string $cropData = null)
+    {
+        return $this->withMeta(compact('cropData'));
     }
 
 

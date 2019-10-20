@@ -6,9 +6,6 @@
         <div class="w-3/4 py-4">
             <div class="media-image_wrap mod_field-detail rounded overflow-hidden">
                 <img class="media-image" :src="path" v-if="path">
-                <!--<a :href="downloadPath" download class="media-image_download" @click.stop>-->
-                    <!--<icon type="download" width="14" height="14"/>-->
-                <!--</a>-->
             </div>
             <p v-if="path" class="flex items-center text-sm mt-3">
                 <a
@@ -34,7 +31,6 @@
 </template>
 
 <script>
-    import axios from 'axios';
 
     export default {
         props: ['resource', 'resourceName', 'resourceId', 'field'],
@@ -46,7 +42,6 @@
         mounted() {
             const {value, previewDetailUrl, previewUrl} = this.field;
             if (value) {
-                console.log(this.field)
                 this.path = value[previewDetailUrl] || value[previewUrl];
             }
         },
@@ -60,13 +55,5 @@
                 document.body.removeChild(link);
             },
         },
-        computed: {
-            // thumbPath() {
-            //     return `/thumbs/${this.field.params.thumbs.adminThumbFolder}/`;
-            // },
-            // downloadPath() {
-            //     return '/storage/' + this.croppedMedia.path + '/' + this.croppedMedia.name;
-            // }
-        }
     }
 </script>
